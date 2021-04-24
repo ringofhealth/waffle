@@ -138,7 +138,7 @@ defmodule Waffle.Processor do
       end
 
   """
-  alias Waffle.Transformations.Convert
+  alias Waffle.Transformations.{Convert, CustomConvert}
 
   def process(definition, version, {file, scope}) do
     transform = definition.transform(version, {file, scope})
@@ -149,6 +149,10 @@ defmodule Waffle.Processor do
   defp apply_transformation(file, :noaction), do: {:ok, file}
   # Deprecated
   defp apply_transformation(file, {:noaction}), do: {:ok, file}
+
+  defp apply_transformation(file, executor) when is_function(executor) do
+    CustomConvert.apply(file, executor)
+  end
 
   defp apply_transformation(file, {cmd, conversion}) do
     Convert.apply(cmd, file, conversion)
