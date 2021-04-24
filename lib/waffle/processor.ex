@@ -150,8 +150,8 @@ defmodule Waffle.Processor do
   # Deprecated
   defp apply_transformation(file, {:noaction}), do: {:ok, file}
 
-  defp apply_transformation(file, executor) when is_function(executor) do
-    CustomConvert.apply(file, executor)
+  defp apply_transformation(file, {executor, extension}) when is_function(executor) do
+    CustomConvert.apply(file, executor, extension)
   end
 
   defp apply_transformation(file, {cmd, conversion}) do
