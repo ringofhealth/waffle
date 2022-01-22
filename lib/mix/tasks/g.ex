@@ -80,9 +80,18 @@ defmodule Mix.Tasks.Waffle do
       #   :custom_bucket_name
       # end
 
+      # def bucket({_file, scope}) do
+      #   scope.bucket || bucket()
+      # end
+
       # Whitelist file extensions:
       # def validate({file, _}) do
-      #   ~w(.jpg .jpeg .gif .png) |> Enum.member?(Path.extname(file.file_name))
+      #   file_extension = file.file_name |> Path.extname() |> String.downcase()
+      #
+      #   case Enum.member?(~w(.jpg .jpeg .gif .png), file_extension) do
+      #     true -> :ok
+      #     false -> {:error, "invalid file type"}
+      #   end
       # end
 
       # Define a thumbnail transformation:
