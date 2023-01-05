@@ -70,7 +70,6 @@ defmodule Waffle.Actions.Store do
         put_versions(definition, {file, scope})
 
         {:ok, %{file_name: file.file_name, metadata: Waffle.Helper.extract_metadata(file)}}
-        |> IO.inspect()
 
       {:error, message} ->
         {:error, message}

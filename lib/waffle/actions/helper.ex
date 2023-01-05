@@ -13,7 +13,31 @@ defmodule Waffle.Helper do
   end
 
   def fetch_image_metadata(path) do
-    %{}
+    case System.cmd("sh", [
+           "-c",
+           "exiftool -json #{path}"
+         ]) do
+      {output, 0} ->
+        [
+          %{
+            "ImageWidth" => width,
+            "ImageHeight" => height,
+            "ImageSize" => image_size,
+            "MIMEType" => mime_type
+          }
+        ] = Jason.decode!(output)
+
+        %{
+          "width" => width,
+          "height" => height,
+          "mime" => mime_type,
+          "file_type" => "image",
+          "dim" => image_size
+        }
+
+      _ ->
+        %{}
+    end
   end
 
   defp fetch_video_metadata(path) do
@@ -43,7 +67,9 @@ defmodule Waffle.Helper do
         |> Map.merge(%{
           "calculated_aspect" => calculated_aspect,
           "vertical" => vertical,
-          "creation" => creation_time
+          "creation" => creation_time |> DateTime.to_unix(),
+          "file_type" => "video",
+          "dim" => "#{width}x#{height}"
         })
 
       _ ->
