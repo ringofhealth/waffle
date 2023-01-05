@@ -60,7 +60,7 @@ defmodule Waffle.Mixfile do
       {:ex_aws, "~> 2.1", optional: true},
       {:ex_aws_s3, "~> 2.1", optional: true},
       {:sweet_xml, "~> 0.6", optional: true},
-
+      {:mime, "~> 2.0"},
       # Test
       {:mock, "~> 0.3", only: :test},
 
