@@ -69,47 +69,14 @@ defmodule Waffle.Actions.Store do
       result when result == true or result == :ok ->
         put_versions(definition, {file, scope})
 
-        {:ok, %{file_name: file.file_name, metadata: extract_metadata(file)}}
+        {:ok, %{file_name: file.file_name, metadata: Waffle.Helper.extract_metadata(file)}}
+        |> IO.inspect()
 
       {:error, message} ->
         {:error, message}
 
       _ ->
         {:error, :invalid_file}
-    end
-  end
-
-  defp extract_metadata(%{path: path, file_name: file_name}) do
-    if String.contains?(file_name, ".mp4") do
-      {output, 0} =
-        System.cmd("sh", [
-          "-c",
-          "ffprobe -hide_banner -loglevel fatal -show_error -show_format -show_streams -show_programs -show_chapters -show_private_data -print_format json -show_format #{path}"
-        ])
-
-      %{
-        "format" => %{"tags" => %{"creation_time" => creation_time}} = format,
-        "streams" => [
-          %{
-            "width" => width,
-            "height" => height
-          } = video_stream
-          | _
-        ]
-      } = Jason.decode!(output) |> IO.inspect()
-
-      calculated_aspect = Float.round(width / height, 2)
-      vertical = calculated_aspect < 1.0
-
-      Map.take(format, ["bit_rate", "duration", "format_name", "size", "start_time"])
-      |> Map.merge(
-        Map.take(video_stream, ["codec_name", "display_aspect_ratio", "width", "height"])
-      )
-      |> Map.merge(%{
-        "calculated_aspect" => calculated_aspect,
-        "vertical" => vertical,
-        "video_creation" => creation_time
-      })
     end
   end
 
