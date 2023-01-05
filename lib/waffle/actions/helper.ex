@@ -52,7 +52,6 @@ defmodule Waffle.Helper do
   end
 
   def file_type(filename) do
-    file_type = MIME.from_path(file.file_name)
     ext = String.split(filename, ".") |> List.last()
 
     cond do
