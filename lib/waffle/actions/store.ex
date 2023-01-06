@@ -67,9 +67,10 @@ defmodule Waffle.Actions.Store do
   defp put(definition, {%Waffle.File{} = file, scope}) do
     case definition.validate({file, scope}) do
       result when result == true or result == :ok ->
-        put_versions(definition, {file, scope})
+        metadata = Waffle.Helper.extract_metadata(file)
+        put_versions(definition, {%{file | metadata: metadata}, scope})
 
-        {:ok, %{file_name: file.file_name, metadata: Waffle.Helper.extract_metadata(file)}}
+        {:ok, %{file_name: file.file_name, metadata: metadata}}
 
       {:error, message} ->
         {:error, message}

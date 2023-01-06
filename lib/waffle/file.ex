@@ -1,7 +1,7 @@
 defmodule Waffle.File do
   @moduledoc false
 
-  defstruct [:path, :file_name, :binary, :is_tempfile?]
+  defstruct [:path, :file_name, :binary, :is_tempfile?, :metadata]
 
   def generate_temporary_path(item \\ nil) do
     do_generate_temporary_path(item)
