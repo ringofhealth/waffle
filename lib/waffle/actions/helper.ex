@@ -61,6 +61,8 @@ defmodule Waffle.Helper do
 
         calculated_aspect = Float.round(width / height, 2)
         vertical = calculated_aspect < 1.0
+        {:ok, datetime, _} = DateTime.from_iso8601(creation_time)
+        creation_unix = datetime |> DateTime.to_unix()
 
         Map.take(format, ["bit_rate", "duration", "format_name", "size", "start_time"])
         |> Map.merge(
@@ -69,7 +71,7 @@ defmodule Waffle.Helper do
         |> Map.merge(%{
           "calculated_aspect" => calculated_aspect,
           "vertical" => vertical,
-          "creation" => creation_time |> DateTime.to_unix(),
+          "creation_epoch" => creation_unix,
           "file_type" => "video",
           "dim" => "#{width}x#{height}"
         })
