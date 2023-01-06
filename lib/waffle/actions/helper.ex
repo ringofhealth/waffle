@@ -22,17 +22,19 @@ defmodule Waffle.Helper do
           %{
             "ImageWidth" => width,
             "ImageHeight" => height,
-            "ImageSize" => image_size,
-            "MIMEType" => mime_type
+            "ImageSize" => image_size
           }
         ] = Jason.decode!(output)
+
+        calculated_aspect = Float.round(width / height, 2)
+        vertical = calculated_aspect < 1.0
 
         %{
           "width" => width,
           "height" => height,
-          "mime" => mime_type,
           "file_type" => "image",
-          "dim" => image_size
+          "dim" => image_size,
+          "vertical" => vertical
         }
 
       _ ->
