@@ -50,7 +50,7 @@ defmodule Waffle.Helper do
          ]) do
       {output, 0} ->
         %{
-          "format" => format,
+          "format" => %{"duration" => duration} = format,
           "streams" => [
             %{
               "width" => width,
@@ -62,8 +62,11 @@ defmodule Waffle.Helper do
 
         calculated_aspect = Float.round(width / height, 2)
         vertical = calculated_aspect < 1.0
+        {float, _} = Float.parse(duration)
 
-        Map.take(format, ["bit_rate", "duration", "format_name", "size", "start_time"])
+        parsed_duration = Float.ceil(float) |> trunc()
+
+        Map.take(format, ["bit_rate", "format_name", "size", "start_time"])
         |> Map.merge(
           Map.take(video_stream, ["codec_name", "display_aspect_ratio", "width", "height"])
         )
@@ -71,7 +74,8 @@ defmodule Waffle.Helper do
           "calculated_aspect" => calculated_aspect,
           "vertical" => vertical,
           "file_type" => "video",
-          "dim" => "#{width}x#{height}"
+          "dim" => "#{width}x#{height}",
+          "duration" => parsed_duration
         })
 
       _ ->
