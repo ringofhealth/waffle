@@ -41,6 +41,7 @@ defmodule Waffle.Actions.Store do
 
   """
 
+  require Logger
   alias Waffle.Actions.Store
   alias Waffle.Definition.Versioning
 
@@ -75,7 +76,8 @@ defmodule Waffle.Actions.Store do
       {:error, message} ->
         {:error, message}
 
-      _ ->
+      e ->
+        Logger.error("[Waffle PUT] #{inspect(e)}")
         {:error, :invalid_file}
     end
   end
