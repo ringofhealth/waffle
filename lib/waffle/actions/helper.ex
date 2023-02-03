@@ -1,4 +1,14 @@
 defmodule Waffle.Helper do
+  def md5_regex(hash) do
+    case Regex.match?(~r/^[a-f0-9]{32}$/iu, hash) do
+      true ->
+        hash
+
+      false ->
+        nil
+    end
+  end
+
   def extract_metadata(%{path: path, file_name: file_name}) do
     case file_type(file_name) do
       :video ->
@@ -9,6 +19,20 @@ defmodule Waffle.Helper do
 
       _ ->
         %{}
+    end
+    |> Map.merge(%{"md5" => calculate_md5(path)})
+  end
+
+  def calculate_md5(path) do
+    case System.cmd("sh", [
+           "-c",
+           "md5sum #{path}"
+         ]) do
+      {output, 0} ->
+        String.split(output, " ") |> List.first() |> md5_regex
+
+      _ ->
+        nil
     end
   end
 
