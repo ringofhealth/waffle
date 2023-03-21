@@ -1,5 +1,6 @@
 defmodule Waffle.Transformations.CustomConvert do
   @moduledoc false
+  require Logger
 
   def apply(file, executor, extension \\ nil)
 
@@ -16,11 +17,17 @@ defmodule Waffle.Transformations.CustomConvert do
         {:ok, %Waffle.File{file | path: new_path, is_tempfile?: true}}
 
       {:error, error_message} ->
+        Logger.error(inspect(error_message))
         {:error, error_message}
+
+      e ->
+        Logger.error(inspect(e))
     end
   end
 
   def apply(_file, _executor, _extension) do
+    Logger.error("unexpected custom convert")
+
     {:error, :invalid_custom_ops}
   end
 end

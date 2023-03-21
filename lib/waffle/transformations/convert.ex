@@ -1,6 +1,8 @@
 defmodule Waffle.Transformations.Convert do
   @moduledoc false
 
+  require Logger
+
   def apply(cmd, file, args, extension \\ nil) do
     new_path =
       if extension,
@@ -22,7 +24,8 @@ defmodule Waffle.Transformations.Convert do
       {_, 0} ->
         {:ok, %Waffle.File{file | path: new_path, is_tempfile?: true}}
 
-      {error_message, _exit_code} ->
+      {error_message, _exit_code} = e ->
+        Logger.error(inspect(e))
         {:error, error_message}
     end
   end
