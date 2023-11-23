@@ -53,7 +53,20 @@ defmodule WaffleTest.Actions.Store do
       put: fn DummyDefinition, _, {%{file_name: "image.png", path: @img}, nil} ->
         {:ok, "resp"}
       end do
-      assert DummyDefinition.store(@img) == {:ok, "image.png"}
+      assert DummyDefinition.store(@img) ==
+               {:ok,
+                %{
+                  file_name: "image.png",
+                  metadata: %{
+                    "dim" => "128x128",
+                    "duration" => 0,
+                    "file_type" => "image",
+                    "height" => 128,
+                    "md5" => "aa226c8297f0abd3ee0b84f886008286",
+                    "vertical" => false,
+                    "width" => 128
+                  }
+                }}
     end
   end
 
@@ -62,7 +75,21 @@ defmodule WaffleTest.Actions.Store do
       put: fn DummyDefinition, _, {%{file_name: "image.png", path: @img}, :scope} ->
         {:ok, "resp"}
       end do
-      assert DummyDefinition.store({@img, :scope}) == {:ok, "image.png"}
+      assert DummyDefinition.store({@img, :scope}) == {
+               :ok,
+               %{
+                 file_name: "image.png",
+                 metadata: %{
+                   "dim" => "128x128",
+                   "duration" => 0,
+                   "file_type" => "image",
+                   "height" => 128,
+                   "md5" => "aa226c8297f0abd3ee0b84f886008286",
+                   "vertical" => false,
+                   "width" => 128
+                 }
+               }
+             }
     end
   end
 
@@ -71,7 +98,21 @@ defmodule WaffleTest.Actions.Store do
       put: fn DummyDefinition, _, {%{file_name: "image.png", path: @img}, nil} ->
         {:ok, "resp"}
       end do
-      assert DummyDefinition.store(%{filename: "image.png", path: @img}) == {:ok, "image.png"}
+      assert DummyDefinition.store(%{filename: "image.png", path: @img}) == {
+               :ok,
+               %{
+                 file_name: "image.png",
+                 metadata: %{
+                   "dim" => "128x128",
+                   "duration" => 0,
+                   "file_type" => "image",
+                   "height" => 128,
+                   "md5" => "aa226c8297f0abd3ee0b84f886008286",
+                   "vertical" => false,
+                   "width" => 128
+                 }
+               }
+             }
     end
   end
 
@@ -81,7 +122,21 @@ defmodule WaffleTest.Actions.Store do
         {:ok, "resp"}
       end do
       assert DummyDefinition.store({%{filename: "image.png", path: @img}, :scope}) ==
-               {:ok, "image.png"}
+               {
+                 :ok,
+                 %{
+                   file_name: "image.png",
+                   metadata: %{
+                     "dim" => "128x128",
+                     "duration" => 0,
+                     "file_type" => "image",
+                     "height" => 128,
+                     "md5" => "aa226c8297f0abd3ee0b84f886008286",
+                     "vertical" => false,
+                     "width" => 128
+                   }
+                 }
+               }
     end
   end
 
@@ -147,7 +202,21 @@ defmodule WaffleTest.Actions.Store do
       put: fn DummyDefinition, _, {%{file_name: "favicon.ico", path: _}, nil} ->
         {:ok, "favicon.ico"}
       end do
-      assert DummyDefinition.store("https://www.google.com/favicon.ico") == {:ok, "favicon.ico"}
+      assert DummyDefinition.store("https://www.google.com/favicon.ico") == {
+               :ok,
+               %{
+                 file_name: "favicon.ico",
+                 metadata: %{
+                   "dim" => "16x16",
+                   "duration" => 0,
+                   "file_type" => "image",
+                   "height" => 16,
+                   "md5" => "f3418a443e7d841097c714d69ec4bcb8",
+                   "vertical" => false,
+                   "width" => 16
+                 }
+               }
+             }
     end
   end
 
@@ -213,7 +282,21 @@ defmodule WaffleTest.Actions.Store do
       assert DummyDefinition.store(%{
                remote_path: "https://www.google.com/favicon.ico",
                filename: "newfavicon.ico"
-             }) == {:ok, "newfavicon.ico"}
+             }) == {
+               :ok,
+               %{
+                 file_name: "newfavicon.ico",
+                 metadata: %{
+                   "dim" => "16x16",
+                   "duration" => 0,
+                   "file_type" => "image",
+                   "height" => 16,
+                   "md5" => "f3418a443e7d841097c714d69ec4bcb8",
+                   "vertical" => false,
+                   "width" => 16
+                 }
+               }
+             }
     end
   end
 
