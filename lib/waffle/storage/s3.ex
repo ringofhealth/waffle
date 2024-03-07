@@ -259,7 +259,8 @@ defmodule Waffle.Storage.S3 do
   end
 
   defp s3_bucket(definition, version, file_and_scope) do
-    definition.bucket(version, file_and_scope) |> parse_bucket()
+    definition.bucket(version, file_and_scope)
+    |> parse_bucket()
   end
 
   defp s3_bucket(definition, file_and_scope) do

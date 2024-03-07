@@ -158,6 +158,10 @@ defmodule Waffle.Processor do
     CustomConvert.apply(file, executor, extension)
   end
 
+  defp apply_transformation(_file, {:readonly, _, _extension}) do
+    {:ok, nil}
+  end
+
   defp apply_transformation(file, {cmd, conversion, extension}) do
     Convert.apply(cmd, file, conversion, extension)
   end
