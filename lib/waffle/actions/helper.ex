@@ -67,6 +67,10 @@ defmodule Waffle.Helper do
     end
   end
 
+  defp find_video_stream(streams) do
+    Enum.find(streams, &match?(%{"width" => _width, "height" => _height}, &1))
+  end
+
   defp fetch_video_metadata(path) do
     case System.cmd("sh", [
            "-c",
@@ -75,14 +79,10 @@ defmodule Waffle.Helper do
       {output, 0} ->
         %{
           "format" => %{"duration" => duration} = format,
-          "streams" => [
-            %{
-              "width" => width,
-              "height" => height
-            } = video_stream
-            | _
-          ]
+          "streams" => streams
         } = Jason.decode!(output)
+
+        video_stream = %{"width" => width, "height" => height} = find_video_stream(streams)
 
         calculated_aspect = Float.round(width / height, 2)
         vertical = calculated_aspect < 1.0
